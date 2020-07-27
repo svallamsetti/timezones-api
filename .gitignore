@@ -4,3 +4,5 @@ build/
 .coverage
 .pytest_cache/
 htmlCoverage/
+tests/__pycache__/
+timezones/__pycache__/
