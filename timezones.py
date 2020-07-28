@@ -1,9 +1,13 @@
 from flask import Flask
 from flask_restful import Resource, Api
-from datetime import datetime
+from flask_cors import CORS
+import timebyzone
 
 app = Flask(__name__)
 api = Api(app)
+
+CORS(app, resources={r'/api/*': {'origins': '*'}})
+
 
 @app.route('/')
 def home():
@@ -26,7 +30,7 @@ timezones = [
                  "id": 3,
                  "timezone": "ACT",
                  "name": "Acre Time",
-                 "UTCOffset": -5
+                 "UTCOffset": "-5"
                },
                {
                  "id": 4,
@@ -38,7 +42,7 @@ timezones = [
                  "id": 5,
                  "timezone": "ADT",
                  "name": "Atlantic Daylight Time",
-                 "UTCOffset": -3
+                 "UTCOffset": "-3"
                },
                {
                  "id": 6,
@@ -1182,30 +1186,13 @@ timezones = [
                }
             ]
 
-def retrieveTimeInGivenZone(UTCOffset):
-        numberOfHours = UTCOffset[1:]
-        if ':' in numberOfHours:
-            timeInHoursAndMinutes = numberOfHours.split(":")
-            timeUTCOffsetInMicroSeconds = int(timeInHoursAndMinutes[0]) * 3600000 + int(timeInHoursAndMinutes[-1]) * 60000
-        else:
-            timeUTCOffsetInMicroSeconds = int(numberOfHours) * 3600000
-        timeInMicroSeconds = int(datetime.utcnow().strftime("%s")) * 1000
-        if UTCOffset[0] == '-':
-            currentTimeInMilliSeconds =  timeInMicroSeconds - timeUTCOffsetInMicroSeconds
-        else:
-            currentTimeInMilliSeconds =  timeInMicroSeconds + timeUTCOffsetInMicroSeconds
-        seconds = (currentTimeInMilliSeconds//1000)%60
-        minutes = (currentTimeInMilliSeconds//(1000*60))%60
-        hours = (currentTimeInMilliSeconds//(1000*60*60))%24
-        time = str(hours).zfill(2) + ':'+ str(minutes).zfill(2) +':'+ str(seconds).zfill(2)
-        return time
-
 class Timezone(Resource):
     def get(self, timezoneId):
         timezoneId = int(timezoneId)
         timezoneObject = next(filter(lambda timezone: timezone['id'] == timezoneId, timezones), None)
         if timezoneObject:
-            timezoneObject['currentTime'] = retrieveTimeInGivenZone(timezoneObject['UTCOffset'])
+            timezoneObject['currentTime'] = timebyzone.retrieveTimeInGivenZone(timezoneObject['UTCOffset'])['time']
+            timezoneObject['currentTimeIn24Hr'] = timebyzone.retrieveTimeInGivenZone(timezoneObject['UTCOffset'])['twentyFourHourFormat']
             return { 'data': timezoneObject, 'status' : 200, 'error': 'False' }
         return { 'data': {'message' : 'Requested resource not found'}, 'status' : 404, 'error': 'True' }
 
@@ -1217,6 +1204,6 @@ class Timezones(Resource):
             'uri': '/timezones/' + str(timezone['id'])}]
         return { 'data' : timezones, 'status': 200, 'error': 'False'}
 
-api.add_resource(Timezones, '/api/timezones')
+api.add_resource(Timezones, '/api/timezones/')
 api.add_resource(Timezone, '/api/timezones/<int:timezoneId>')
 app.run(host='0.0.0.0', debug=True)

@@ -9,4 +9,4 @@ ENV FLASK_ENV development
 RUN pip install -r requirements.txt
 #Expose container port
 EXPOSE 5000
-CMD ["python", "timezones/timezones.py"]
+CMD ["python", "timezones.py"]
