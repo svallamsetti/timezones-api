@@ -3,3 +3,4 @@ flask-restful
 flask-cors
 pytest
 freezegun
+flask_swagger_ui
