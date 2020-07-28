@@ -1,5 +1,5 @@
-FROM python:3.8.5
-#Setting the working directory to timezones
+FROM python:3.8.5-slim
+#Set the working directory
 WORKDIR /home/apps
 #Copy local contents into the container working directory
 COPY . .
@@ -9,4 +9,5 @@ ENV FLASK_ENV development
 RUN pip install -r requirements.txt
 #Expose container port
 EXPOSE 5000
-CMD ["python", "timezones/timezones.py"]
+#Run Server
+CMD ["python", "timezonesapp.py"]

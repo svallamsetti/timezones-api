@@ -4,3 +4,6 @@ build/
 .coverage
 .pytest_cache/
 htmlCoverage/
+__pycache__/
+.pytest_cache
+.env

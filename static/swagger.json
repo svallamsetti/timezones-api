@@ -1,0 +1,141 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "Timezones API",
+      "version": "1.0.0",
+      "title": "Timezones API",
+      "contact": {
+        "email": "svallamsetti@gmail.com"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+        {
+          "url": "http://localhost:5001"
+        }
+      ],
+    "tags": [
+    {
+        "name": "Timezones API",
+        "description": "List All timezones and Retrieve time in a give zone"
+    }
+    ],
+    "paths": {
+    "/api/timezones": {
+        "get": {
+        "tags": [
+            "Timezones API"
+        ],
+        "summary": "Returns list of timezones",
+        "responses": {
+            "200": {
+            "description": "OK",
+            "schema": {
+                "$ref": "#/components/schemas/timezones"
+            }
+            }
+        }
+        }
+    },
+    "/api/timezones/{timezoneId}": {
+        "parameters": [
+        {
+            "name": "timezoneId",
+            "in": "path",
+            "required": true,
+            "description": "Id of the timezone",
+            "type": "string"
+        }
+        ],
+        "get": {
+        "tags": [
+            "Timezones API"
+        ],
+        "summary": "Returns time in a given timezone",
+        "responses": {
+            "200": {
+            "description": "OK",
+            "schema": {
+                "$ref": "#/components/schemas/timezone"
+            }
+            },
+            "400": {
+                "description": "Failed. Misunderstood Request."
+              },
+            "404": {
+            "description": "Failed. Timezone not found."
+            }
+        }
+        }
+    }
+    },
+    "components": {
+        "schemas": { 
+          "timezone": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "number"
+              },
+              "timezone": {
+                "type": "string",
+                "format": "string"
+              },
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "string"
+              },
+              "UTCOffset": {
+                "type": "string",
+                "format": "string"
+              },
+              "currentTime": {
+                "type": "string",
+                "format": "string"
+              },
+              "currentTimeIn24Hr": {
+                "type": "string",
+                "format": "string"
+              }
+            }
+          },
+          "timezones": {
+            "type": "object",
+            "properties": {
+            "id": {
+                "type": "string",
+                "format": "number"
+                },
+                "timezone": {
+                "type": "string",
+                "format": "string"
+                },
+                "name": {
+                "type": "string",
+                "format": "string"
+                },
+                "timestamp": {
+                "type": "string",
+                "format": "string"
+                },
+                "UTCOffset": {
+                "type": "string",
+                "format": "string"
+                },
+                "links": {
+                "type": "list",
+                "format": "list"
+                }
+            }
+          }
+        }
+      }
+  }

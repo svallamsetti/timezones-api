@@ -3,7 +3,7 @@ services:
   apis:
     build: .
     ports:
-      - "5001:5000"
+      - "${HOST_PORT-5001}:5000"
     volumes:
       - .:/home/apps
     restart: always

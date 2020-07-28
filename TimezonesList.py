@@ -1,9 +1,6 @@
-from flask import Flask, jsonify
-from datetime import datetime
-
-app = Flask(__name__)
-
-timezones = [
+class TimezonesList:
+    def getTimeZones(self):
+        return [
                {
                  "id": 1,
                  "timezone": "ACDT",
@@ -20,7 +17,7 @@ timezones = [
                  "id": 3,
                  "timezone": "ACT",
                  "name": "Acre Time",
-                 "UTCOffset": -5
+                 "UTCOffset": "-5"
                },
                {
                  "id": 4,
@@ -32,7 +29,7 @@ timezones = [
                  "id": 5,
                  "timezone": "ADT",
                  "name": "Atlantic Daylight Time",
-                 "UTCOffset": -3
+                 "UTCOffset": "-3"
                },
                {
                  "id": 6,
@@ -1174,9 +1171,4 @@ timezones = [
                  "name": "Yekaterinburg Time",
                  "UTCOffset": "+5"
                }
-             ]
-
-@app.route('/')
-def home():
-    return 'Welcome to Timezones API'
-app.run(host='0.0.0.0', debug=True)
+        ]
